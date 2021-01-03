@@ -99,12 +99,17 @@ union isa_t
         uintptr_t has_assoc         : 1;
 //      has_cxx_dtor->是否包括C++析构函数类似于dealloc
         uintptr_t has_cxx_dtor      : 1;
-//      shiftcls->地址位数
+//      shiftcls->地址位数:cls->类对象
         uintptr_t shiftcls          : 33; // MACH_VM_MAX_ADDRESS 0x1000000000
+//      存储Class、Meta-Class对象的内存信息
         uintptr_t magic             : 6;
+//      是否被弱引用对象解析过
         uintptr_t weakly_referenced : 1;
+//      对象是否被释放
         uintptr_t deallocating      : 1;
+//      如果extra_rc不够存储那么标记为1，要么为0
         uintptr_t has_sidetable_rc  : 1;
+        //      引用计数器
         uintptr_t extra_rc          : 19;
 #       define RC_ONE   (1ULL<<45)
 #       define RC_HALF  (1ULL<<18)
