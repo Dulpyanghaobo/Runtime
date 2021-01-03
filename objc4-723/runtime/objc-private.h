@@ -97,9 +97,9 @@ union isa_t
         uintptr_t nonpointer        : 1;
 //      has_assoc->关联对象:是否有设置过关联对象
         uintptr_t has_assoc         : 1;
-//      
+//      has_cxx_dtor->是否包括C++析构函数类似于dealloc
         uintptr_t has_cxx_dtor      : 1;
-//        地址值。
+//      shiftcls->地址位数
         uintptr_t shiftcls          : 33; // MACH_VM_MAX_ADDRESS 0x1000000000
         uintptr_t magic             : 6;
         uintptr_t weakly_referenced : 1;
