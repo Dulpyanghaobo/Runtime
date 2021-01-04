@@ -103,7 +103,7 @@ union isa_t
         uintptr_t shiftcls          : 33; // MACH_VM_MAX_ADDRESS 0x1000000000
 //      存储Class、Meta-Class对象的内存信息
         uintptr_t magic             : 6;
-//      是否被弱引用对象解析过
+//      是否被弱引用对象解析过__weak
         uintptr_t weakly_referenced : 1;
 //      对象是否被释放
         uintptr_t deallocating      : 1;

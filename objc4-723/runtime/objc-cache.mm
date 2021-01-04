@@ -278,8 +278,7 @@ void bucket_t::set(cache_key_t newKey, IMP newImp)
 
 #endif
 
-void cache_t::setBucketsAndMask(struct bucket_t *newBuckets, mask_t newMask)
-{
+   {
     // objc_msgSend uses mask and buckets with no locks.
     // It is safe for objc_msgSend to see new buckets but old mask.
     // (It will get a cache miss but not overrun the buckets' bounds).

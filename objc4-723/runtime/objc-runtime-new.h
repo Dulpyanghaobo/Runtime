@@ -36,7 +36,9 @@ struct swift_class_t;
 
 struct bucket_t {
 private:
+//    keySEL存储IMP地址值
     cache_key_t _key;
+//    对应方法的地址
     IMP _imp;
 
 public:
@@ -48,10 +50,13 @@ public:
     void set(cache_key_t newKey, IMP newImp);
 };
 
-
+//  方法缓存:缓存调用过的方法
 struct cache_t {
+//  散列表方式存储方法
     struct bucket_t *_buckets;
+//    散列表长度-1
     mask_t _mask;
+//    已经缓存的方法数量
     mask_t _occupied;
 
 public:
@@ -205,10 +210,13 @@ struct entsize_list_tt {
 
 
 struct method_t {
+//    函数名
     SEL name;
+//    编码（返回值、参数类型）
     const char *types;
-    IMP imp;
-
+//    指向函数的指针(函数地址)
+    IMP imp;//->具体实现
+//根据函数名 对方法进行排序
     struct SortBySELAddress :
         public std::binary_function<const method_t&,
                                     const method_t&, bool>
@@ -524,7 +532,7 @@ struct locstamped_category_list_t {
 
 #endif
 
-
+//类的初始信息->类的初始信息无法修改
 struct class_ro_t {
     uint32_t flags;
     uint32_t instanceStart;
@@ -534,7 +542,7 @@ struct class_ro_t {
 #endif
 
     const uint8_t * ivarLayout;
-    
+//    包括一位数组初始化内容->只读
     const char * name;
     method_list_t * baseMethodList;
     protocol_list_t * baseProtocols;
@@ -756,7 +764,8 @@ class list_array_tt {
 };
 
 
-class method_array_t : 
+class method_array_t :
+//定义二位数组:其中包括<method_list_t[method_t,method_t],method_list_t,method_list_t,method_list_t>
     public list_array_tt<method_t, method_list_t> 
 {
     typedef list_array_tt<method_t, method_list_t> Super;
@@ -798,6 +807,8 @@ class protocol_array_t :
 };
 
 
+/// 包括的具体信息
+//
 struct class_rw_t {
     // Be warned that Symbolication knows the layout of this structure.
     uint32_t flags;
@@ -805,6 +816,8 @@ struct class_rw_t {
 
     const class_ro_t *ro;
 
+//method_array_t、property_array_t、protocol_array_t可读可写
+//    设置二位数组的好处动态修改分类内容，分类放在最前面
     method_array_t methods;
     property_array_t properties;
     protocol_array_t protocols;
@@ -841,7 +854,7 @@ struct class_rw_t {
     }
 };
 
-
+#warning class_data_bits_t包括类具体信息
 struct class_data_bits_t {
 
     // Values are the FAST_ flags above.
@@ -1066,7 +1079,7 @@ struct objc_class : objc_object {
     Class superclass;
     cache_t cache;             // formerly cache pointer and vtable
     class_data_bits_t bits;    // class_rw_t * plus custom rr/alloc flags
-
+//包括具体信息
     class_rw_t *data() { 
         return bits.data();
     }
